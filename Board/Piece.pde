@@ -4,6 +4,7 @@ abstract class Piece {
   PVector position;
   ArrayList<PVector> validSquares;
   int color;
+  PVector[] directions;
   
   public Piece(Board b) {
     board = b;
