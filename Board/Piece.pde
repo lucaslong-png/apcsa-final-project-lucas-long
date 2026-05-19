@@ -5,27 +5,42 @@ abstract class Piece {
   ArrayList<PVector> validSquares;
   int color;
   PVector[] directions;
+  boolean hasMoved;
   
-  public Piece(Board b) {
+  public Piece(Board b, PVector position) {
     board = b;
     alive = true;
+    hasMoved = false;
+    this.position = position
   }
-  
-  abstract void select();
-  
+    
   abstract boolean isMoveValid(PVector newPos);
   
-  abstract void move(PVector newPos);
-
-  abstract void updatePosition();
+  public void move(PVector newPos) {
+    Piece p;
+    x = (int) position.x;
+    y = (int) position.y
+    if (grid[x][y] != null) {
+      p = grid[x][y];
+      p.alive = false;
+    }
+    position.set(newPos);
+    grid[x][y] = this;
+  }
   
-  abstract void updateValidSquares();
   
+  
+  public static boolean equals(PVector v1, PVector v2) {
+    return (abs(v1.x - v2.x) < 0.001 && abs(v1.y == v2.y) < 0.001);
+  }
+  
+  public static boolean sameDirection(PVector v1, PVector v2) {
+    return equals(v1.copy().normalize(), v2.copy().normalize());
+  }
   
   
   public void update() {
     move()
-    updatePosition();
     updateValidSquares();
   }
 }
