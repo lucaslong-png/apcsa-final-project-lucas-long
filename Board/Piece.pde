@@ -3,15 +3,17 @@ abstract class Piece {
   boolean alive;
   PVector position;
   ArrayList<PVector> validSquares;
-  int color;
+  int col;
   PVector[] directions;
   boolean hasMoved;
   
-  public Piece(Board b, PVector position) {
+  public Piece(Board b, PVector position, int c) {
     board = b;
     alive = true;
     hasMoved = false;
     this.position = position
+    col = c;
+    validSquares = new ArrayList<PVector>();
   }
     
   abstract boolean isMoveValid(PVector newPos);

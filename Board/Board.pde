@@ -8,8 +8,18 @@ class Board {
     grid = new Piece[8][8];    
   }
   
-  public setup() {
+  public void setup() {
     gameover = false;
     Pieces = new ArrayList<Pieces>;
+  }
+  
+  public void castle {
+  }
+  
+  public void promotion {
+  }
+  
+  public void enpessant {
+  }
 
 }

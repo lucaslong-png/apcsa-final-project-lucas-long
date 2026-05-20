@@ -1,32 +1,32 @@
 class Queen extends Piece {
   
-  public Queen(Board b, PVector pos, int col) {
-    super(b, pos);
-    color = col;
-    validSquares = new ArrayList<PVector>();
+  public Queen(Board b, PVector pos, int c) {
+    super(b, pos, c);
     directions = new PVector[]{
       new PVector(0, 1), new PVector(1, 1), new PVector(1, 0), 
       new PVector(1, -1), new PVector(0, -1), new PVector(-1, -1), 
       new PVector(-1, 0), new PVector(-1, 1)
-    }
+    };
   }
   
   public boolean isMoveValid(PVector newPos) {
     PVector d = new PVector(0, 0);
     PVector copy = newPos.copy();
+    PVector disp = null;
     for (PVector dir : directions) {
       if (Piece.sameDirection(copy.sub(position), dir)) {
         d = dir;
+        disp = newPos.copy().sub(position);
         break;
       }
       copy = newPos.copy();
     }
-    if (d.x == 0 && d.y == 0) {
+    if (disp == null) {
       return false;
     }
     else {
       PVector pos = position.copy();
-      int squareCount = (int) (copy.mag()/d.mag());
+      int squareCount = (int) (disp.mag() / d.mag() + 0.1);
       for (int i = 0; i < squareCount - 1; i++) {
         PVector checkSquare = pos.add(d);
         if (board[(int) checkSquare.x][(int) checkSquare.y] != null) {
@@ -34,12 +34,17 @@ class Queen extends Piece {
         }
       }
     }
+    if (board[(int) newPos.x][(int) newPos.y] != null) {
+      if (board[(int) newPos.x][(int) newPos.y].col == this.col) {
+        return false;
+      }
+    }
     return true;  
   }
   
-  public updateValidSquares() {
+  public void updateValidSquares() {
     PVector checkPos = position.copy();
-    validSquares = new ArrayList<PVector>;
+    validSquares = new ArrayList<PVector>();
     for (PVector dir : directions) {
       while (true) {
         checkPos.add(dir.copy());
@@ -47,7 +52,7 @@ class Queen extends Piece {
           break;
         }
         if (isMoveValid(checkPos)) {
-          validSquares.add(checkPos);
+          validSquares.add(checkPos.copy());
         }
       }
       checkPos = position.copy();

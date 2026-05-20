@@ -1,14 +1,12 @@
 class King extends Piece {
   
-  public King(Board b, PVector pos, int col) {
-    super(b, pos);
-    color = col;
-    validSquares = new ArrayList<PVector>;
+  public King(Board b, PVector pos, int c) {
+    super(b, pos, c);
     directions = new PVector[]{
       new PVector(0, 1), new PVector(1, 1), new PVector(1, 0), 
       new PVector(1, -1), new PVector(0, -1), new PVector(-1, -1), 
-      new PVector(0, -1), new PVector(1, -1)
-    }
+      new PVector(-1, 0), new PVector(-1, 1)
+    };
   }
   
   public boolean isMoveValid(PVector newPos) {
