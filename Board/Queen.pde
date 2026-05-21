@@ -1,4 +1,4 @@
-class Queen extends Piece {
+class Queen extends SlidingPiece {
   
   public Queen(Board b, PVector pos, int c) {
     super(b, pos, c);
@@ -8,57 +8,4 @@ class Queen extends Piece {
       new PVector(-1, 0), new PVector(-1, 1)
     };
   }
-  
-  public boolean isMoveValid(PVector newPos) {
-    PVector d = new PVector(0, 0);
-    PVector copy = newPos.copy();
-    PVector disp = null;
-    for (PVector dir : directions) {
-      if (Piece.sameDirection(copy.sub(position), dir)) {
-        d = dir;
-        disp = newPos.copy().sub(position);
-        break;
-      }
-      copy = newPos.copy();
-    }
-    if (disp == null) {
-      return false;
-    }
-    else {
-      PVector pos = position.copy();
-      int squareCount = (int) (disp.mag() / d.mag() + 0.1);
-      for (int i = 0; i < squareCount - 1; i++) {
-        PVector checkSquare = pos.add(d);
-        if (board[(int) checkSquare.x][(int) checkSquare.y] != null) {
-          return false;
-        }
-      }
-    }
-    if (board[(int) newPos.x][(int) newPos.y] != null) {
-      if (board[(int) newPos.x][(int) newPos.y].col == this.col) {
-        return false;
-      }
-    }
-    return true;  
-  }
-  
-  public void updateValidSquares() {
-    PVector checkPos = position.copy();
-    validSquares = new ArrayList<PVector>();
-    for (PVector dir : directions) {
-      while (true) {
-        checkPos.add(dir.copy());
-        if (checkPos.x < 0 || checkPos.x > 7 || checkPos.y < 0 || checkPos.y > 7) {
-          break;
-        }
-        if (isMoveValid(checkPos)) {
-          validSquares.add(checkPos.copy());
-        }
-      }
-      checkPos = position.copy();
-    }
-  }
-  
-  
-  
   

@@ -33,7 +33,7 @@ abstract class Piece {
   
   
   public static boolean equals(PVector v1, PVector v2) {
-    return (abs(v1.x - v2.x) < 0.001 && abs(v1.y == v2.y) < 0.001);
+    return (abs(v1.x - v2.x) < 0.001 && abs(v1.y - v2.y) < 0.001);
   }
   
   public static boolean sameDirection(PVector v1, PVector v2) {

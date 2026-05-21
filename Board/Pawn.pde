@@ -6,18 +6,13 @@ class Pawn extends Piece {
   }
   
   public boolean isMoveValid(PVector newPos) {
-    if (newpos.x != position.x) {
-      return false;
+    if ((int) newPos.x == (int) position.x)  {
+      if ((int) newPos.y - 1 = (int) position.y) {
+         return true;
+
     }
-    else if (newPos.y >= position.y + 3 || newPos.y <= position.y) {
-      return false;
-    }
-    else if (newPos.y == position.y + 2 && hasMoved) {
-      return false;
-    }
-    else {
-      return true;
-    }
+    
+
   }
   
   public void updateValidSquares() {
@@ -27,6 +22,7 @@ class Pawn extends Piece {
       validSquares.add(position.copy().add(new PVector(0, 2)));
     }
   }
+}
 
   
   

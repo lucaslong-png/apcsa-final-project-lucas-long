@@ -1,11 +1,11 @@
-class King extends Piece {
+class Knight extends Piece {
   
-  public King(Board b, PVector pos, int c) {
+  public Knight(Board b, PVector pos, int c) {
     super(b, pos, c);
     directions = new PVector[]{
-      new PVector(0, 1), new PVector(1, 1), new PVector(1, 0), 
-      new PVector(1, -1), new PVector(0, -1), new PVector(-1, -1), 
-      new PVector(-1, 0), new PVector(-1, 1)
+      new PVector(2, 1), new PVector(1, 2), new PVector(-1, 2), 
+      new PVector(-2, 1), new PVector(-2, -1), new PVector(-1, -2), 
+      new PVector(1, -2), new PVector(2, -1)
     };
   }
   
