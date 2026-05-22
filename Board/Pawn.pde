@@ -9,10 +9,17 @@ class Pawn extends Piece {
     if ((int) newPos.x == (int) position.x)  {
       if ((int) newPos.y - 1 = (int) position.y) {
          return true;
-
+      }
+      if ((int) newPos.y - 2 = (int) position.y && !hasMoved) {
+        return true;
+      }
+      else {
+        return false;
+      }
     }
     
-
+    else if (abs((int) newPos.x - (int) position.x) = 1) {
+      
   }
   
   public void updateValidSquares() {

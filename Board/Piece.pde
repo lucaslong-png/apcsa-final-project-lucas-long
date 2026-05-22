@@ -29,6 +29,7 @@ abstract class Piece {
     }
     position.set(newPos);
     grid[x][y] = this;
+    hasMoved = true;
   }
   
   
