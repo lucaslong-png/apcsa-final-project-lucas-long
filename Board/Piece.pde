@@ -9,13 +9,14 @@ abstract class Piece {
   
   public Piece(Board b, PVector position, int c) {
     board = b;
+    board[(int) position.x][(int) position.y] = this;
     alive = true;
     hasMoved = false;
     this.position = position
     col = c;
     validSquares = new ArrayList<PVector>();
   }
-    
+  
   abstract boolean isMoveValid(PVector newPos);
   
   public void move(PVector newPos) {
