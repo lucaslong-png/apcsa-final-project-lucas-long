@@ -22,8 +22,13 @@ class Knight extends Piece {
     if (d.x == 0 && d.y == 0) {
       return false;
     }
-    if (board[(int) newPos.x][(int) newPos.y].col == this.col) {
-      return false;
+    if (board[(int) newPos.x][(int) newPos.y] != null) {      
+      if (board[(int) newPos.x][(int) newPos.y].col == this.col) {
+        return false;
+      }
+      else {
+        return true;
+      }
     }
     else {
       return true;

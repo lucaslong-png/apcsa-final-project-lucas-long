@@ -11,8 +11,10 @@ class Board {
   public void setup() {
     gameover = false;
     Pieces = new ArrayList<Pieces>;
-    
   }
+  
+  public void turn() {
+    
   
   public void castle {
   }
