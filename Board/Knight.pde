@@ -7,6 +7,12 @@ class Knight extends Piece {
       new PVector(-2, 1), new PVector(-2, -1), new PVector(-1, -2), 
       new PVector(1, -2), new PVector(2, -1)
     };
+    if (c == 0) {
+      sprite = loadImage("white_knight.png");
+    }
+    else {
+      sprite = loadImage("black_knight.png");
+    }    
   }
   
   public boolean isMoveValid(PVector newPos) {

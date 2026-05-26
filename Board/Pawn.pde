@@ -10,6 +10,12 @@ class Pawn extends Piece {
       dy = -1;
     }
     //directions not necessary for pawn
+    if (c == 0) {
+      sprite = loadImage("white_pawn.png");
+    }
+    else {
+      sprite = loadImage("black_pawn.png");
+    }    
   }
   
   public boolean isMoveValid(PVector newPos) {

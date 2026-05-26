@@ -6,6 +6,8 @@ abstract class Piece {
   int col;
   PVector[] directions;
   boolean hasMoved;
+  PImage sprite;
+  final int squareSize = 100;
   
   public Piece(Board b, PVector position, int c) {
     board = b;
@@ -34,8 +36,10 @@ abstract class Piece {
     grid[x][y] = null;
     hasMoved = true;
   }
-  
 
-    updateValidSquares();
+  abstract void updateValidSquares();
+  
+  public void display() {
+    image(sprite, squareSize * (int) position.x, squareSize * (int) (7 - position.y), squareSize, squareSize);
   }
 }

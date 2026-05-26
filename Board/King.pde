@@ -7,6 +7,12 @@ class King extends Piece {
       new PVector(1, -1), new PVector(0, -1), new PVector(-1, -1), 
       new PVector(-1, 0), new PVector(-1, 1)
     };
+    if (c == 0) {
+      sprite = loadImage("white_king.png");
+    }
+    else {
+      sprite = loadImage("black_king.png");
+    }    
   }
   
   public boolean isMoveValid(PVector newPos) {

@@ -5,4 +5,10 @@ class Bishop extends SlidingPiece {
     directions = new PVector[]{
       new PVector(1, 1), new PVector(1, -1), new PVector(-1, -1), new PVector(-1, 1)
     };
+    if (c == 0) {
+      sprite = loadImage("white_bishop.png");
+    }
+    else {
+      sprite = loadImage("black_bishop.png");
+    }    
   }
