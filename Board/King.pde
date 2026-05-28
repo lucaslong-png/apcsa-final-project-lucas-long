@@ -2,6 +2,7 @@ class King extends Piece {
   
   public King(Board b, PVector pos, int c) {
     super(b, pos, c);
+    gameOver = 0;
     directions = new PVector[]{
       new PVector(0, 1), new PVector(1, 1), new PVector(1, 0), 
       new PVector(1, -1), new PVector(0, -1), new PVector(-1, -1), 
@@ -31,6 +32,7 @@ class King extends Piece {
     if (board[(int) newPos.x][(int) newPos.y].col == this.col) {
       return false;
     }
+    
     else {
       return true;
     }
@@ -49,6 +51,14 @@ class King extends Piece {
       }
     }
   }
-        
+  
+  public int gameOver() {
+    if (alive) {
+      return 0;
+    }
+    else {
+      return 1;
+    }
+  }
     
 }

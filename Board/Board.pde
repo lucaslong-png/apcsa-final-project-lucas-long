@@ -1,6 +1,7 @@
 class Board {
   Piece[][] grid;
-  ArrayList<Piece> Pieces;
+  ArrayList<Piece> whitePieces;
+  ArrayList<Piece> blackPieces;
   Piece selectedPiece;
   boolean gameover;
   int turnTracker;
@@ -9,6 +10,11 @@ class Board {
   boolean canMove;
   final int WHITE = 0;
   final int BLACK = 1;
+  ArrayList<PVector> moveLogPieces;
+  ArrayList<PVector> moveLogSquares;
+  boolean turnFinished;
+  boolean canCastle;
+  
   
   
   public Board() {   
@@ -52,11 +58,50 @@ class Board {
     }  
   }
   
+  public void initializePieces() {
+    whitePieces = new ArrayList<Pieces>();
+    blackPieces = new ArrayList<Pieces>();      
+    for (Piece p : board) {
+      if (p != null) {
+        if (p.color == WHITE) {
+          whitePieces.add(p);
+        }
+        else {
+          blackPieces.add(p);
+        }
+      }
+    }
+  }
+  
+  public ArrayList<PVector> colorValidSquares(ArrayList<Piece> pieceList) {
+    ArrayList<PVector> squareList = new ArrayList<PVector>();
+    for (Piece p : pieceList) {
+      if (p.alive == false) {
+        continue;
+      }
+      innerloop:
+      for (PVector u : p.validSquares) {
+        for (PVector v : squareList) {
+          if (Piece.equals(u, v)) {
+            continue innerloop;
+          }
+        }
+        squareList.add(u);        
+      }
+    }
+    return squareList;
+  }
+            
+  
   public void setup() {
     size(800, 800);
     gameover = false;
-    Pieces = new ArrayList<Pieces>;
     turnTracker = 0;
+    moveLogPieces = new ArrayList<Piece>();
+    moveLogSquares = new ArrayList<PVector>();
+    initializeBoard();
+    initializePieces();
+    promote = false;
   }
   
   public void display() {
@@ -74,14 +119,19 @@ class Board {
   }
   
   public void turn() { 
-    canMove = true;
+    canMove = true; 
     while(!mousePressed) {
     }
     //mouseclicked here
-    canMove = false;
-      
-        
-    turnTracker++;
+    canMove = false;  
+    //promotion check
+    if (moveLogPieces.get(turnTracker) instanceOf Pawn) {
+      if ((int) moveLogSquares.get(turnTracker).y == 0 || (int) moveLogSquares.get(turnTracker).y == 7) {
+        promotion(moveLogSquares.get(turnTracker))
+      }
+    }
+    
+    if (
   }
 
   public void mouseClicked() {
@@ -100,6 +150,7 @@ class Board {
       else {
         if (selectedPiece.isMoveValid(new PVector(gridx, gridy))) {
           selectedPiece.move(new PVector(gridx, gridy));
+          turnTracker++;      
         }
       }      
     }   
@@ -110,7 +161,24 @@ class Board {
   public void castle {
   }
   
-  public void promotion {
+
+  
+  public void promotion(PVector square) {
+    int x = (int) square.x;
+    int y = (int) square.y;
+    c = grid[x][y].col
+    if (key == 1) {
+      grid[x][y] = new Queen(this, new PVector(x, y), c);
+    }
+    else if (key == 2) {
+      grid[x][y] = new Rook(this, new PVector(x, y), c);
+    }
+    else if (key == 3) {
+      grid[x][y] = new Bishop(this, new PVector(x, y), c);
+    }    
+    else if (key == 4) {
+      grid[x][y] = new Knight(this, new PVector(x, y), c);
+    }    
   }
   
   public void enpessant {
