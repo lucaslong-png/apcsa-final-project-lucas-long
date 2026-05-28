@@ -6,10 +6,8 @@ class Board {
   int turnTracker;
   PImage sprite;
   boolean check;
-  boolean canMove;
   final int WHITE = 0;
   final int BLACK = 1;
-  
   
   public Board() {   
     sprite = loadImage("chessboard.png");
@@ -73,36 +71,27 @@ class Board {
     }
   }
   
-  public void turn() { 
-    canMove = true;
-    while(!mousePressed) {
-    }
-    //mouseclicked here
-    canMove = false;
+  public void turn() {
+      
       
         
     turnTracker++;
   }
 
-  public void mouseClicked() {
-    if (canMove) {
-      int gridx = (int) (mouseX / squareSize);
-      int gridy = 7 - (int) (mouseY / squareSize);
-      //selecting piece
-      if (selectedPiece == null) {
-        if (grid[gridx][gridy] != null) {
-          if (grid[gridx][gridy].col == turnTracker % 2) {
-            selectedPiece = grid[gridx][gridy];
-          }
-        }      
-      }
-      //moving piece
-      else {
-        if (selectedPiece.isMoveValid(new PVector(gridx, gridy))) {
-          selectedPiece.move(new PVector(gridx, gridy));
+  mouseClicked() {
+    //selecting piece
+    if (selectedPiece != null) {
+      if (grid[(int) (mouseX / squareSize)][7 - (int) (mouseY / squareSize)] != null) {
+        if (grid[(int) (mouseX / squareSize)][7 - (int) (mouseY / squareSize)].col == turnTracker % 2) {
+          selectedPiece = grid[(int) (mouseX / squareSize)][7 - (int) (mouseY / squareSize)];
         }
       }      
-    }   
+    }
+    //moving piece
+    else {
+    }
+      
+    
   }
     
     
