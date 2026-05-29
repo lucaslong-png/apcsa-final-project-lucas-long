@@ -10,10 +10,10 @@ class Board {
   boolean canMove;
   final int WHITE = 0;
   final int BLACK = 1;
-  ArrayList<PVector> moveLogPieces;
+  ArrayList<Piece> moveLogPieces;
   ArrayList<PVector> moveLogSquares;
   boolean turnFinished;
-  boolean canCastle;
+  boolean castleNow;
   
   
   
@@ -40,8 +40,8 @@ class Board {
     //bishop
     grid[2][0] = new Bishop(this, new PVector(2, 0), WHITE);
     grid[5][0] = new Bishop(this, new PVector(5, 0), WHITE);
-    grid[2][7] = new Bishop(this, new PVector(2, 7), WHITE);
-    grid[5][7] = new Bishop(this, new PVector(5, 7), WHITE);
+    grid[2][7] = new Bishop(this, new PVector(2, 7), BLACK);
+    grid[5][7] = new Bishop(this, new PVector(5, 7), BLACK);
     
     //queen
     grid[3][0] = new Queen(this, new PVector(3, 0), WHITE);
@@ -52,22 +52,24 @@ class Board {
     grid[4][7] = new King(this, new PVector(4, 7), BLACK);
     
     //pawn
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 8; i++) {
       grid[i][1] = new Pawn(this, new PVector(i, 1), WHITE);
       grid[i][6] = new Pawn(this, new PVector(i, 6), BLACK);
     }  
   }
   
   public void initializePieces() {
-    whitePieces = new ArrayList<Pieces>();
-    blackPieces = new ArrayList<Pieces>();      
-    for (Piece p : board) {
-      if (p != null) {
-        if (p.color == WHITE) {
-          whitePieces.add(p);
-        }
-        else {
-          blackPieces.add(p);
+    whitePieces = new ArrayList<Piece>();
+    blackPieces = new ArrayList<Piece>();      
+    for (Piece[] plist : grid) {
+      for (Piece p : plist) {
+        if (p != null) {
+          if (p.color == WHITE) {
+            whitePieces.add(p);
+          }
+          else {
+            blackPieces.add(p);
+          }
         }
       }
     }
@@ -106,9 +108,11 @@ class Board {
   
   public void display() {
     image(sprite, 0, 0, 800, 800);
-    for (Piece p : grid) {
-      if (p != null) {
-        p.display();
+    for (Piece[] plist : grid) {
+      for (Piece p : plist) {
+        if (p != null) {
+          p.display();
+        }
       }
     }
     if (selectedPiece != null) {     
@@ -119,19 +123,23 @@ class Board {
   }
   
   public void turn() { 
-    canMove = true; 
-    while(!mousePressed) {
-    }
-    //mouseclicked here
-    canMove = false;  
     //promotion check
-    if (moveLogPieces.get(turnTracker) instanceOf Pawn) {
-      if ((int) moveLogSquares.get(turnTracker).y == 0 || (int) moveLogSquares.get(turnTracker).y == 7) {
-        promotion(moveLogSquares.get(turnTracker))
+    if (moveLogPieces.get(turnTracker) instanceof Pawn) {
+      if ((int) moveLogSquares.get(turnTracker).y == 0 || (int) moveLogSquares.get(turnTracker).y == 7) {        
+        promotion(moveLogSquares.get(turnTracker));
       }
     }
     
-    if (
+    for (Piece p : whitePieces) {
+      if (p.gameOver() == 1) {
+        gameover = true;
+      }
+    }
+    for (Piece p : blackPieces) {
+      if (p.gameOver() == 1) {
+        gameover = true;
+      }
+    }    
   }
 
   public void mouseClicked() {
@@ -155,6 +163,14 @@ class Board {
       }      
     }   
   }
+  
+  public boolean isLegalMove(Piece p, PVector square) {    
+    if (!p.isMoveValid(square) && !(p instanceof King)) {
+      return false;
+    }
+    //castle check
+    
+    
     
     
   
@@ -166,7 +182,7 @@ class Board {
   public void promotion(PVector square) {
     int x = (int) square.x;
     int y = (int) square.y;
-    c = grid[x][y].col
+    int c = grid[x][y].col;
     if (key == 1) {
       grid[x][y] = new Queen(this, new PVector(x, y), c);
     }
@@ -182,6 +198,7 @@ class Board {
   }
   
   public void enpessant {
+    
   }
   
   public void draw() {

@@ -34,8 +34,8 @@ abstract class Piece {
       p.alive = false;
     }
     position.set(newPos);
-    grid[newx][newy] = this;
-    grid[x][y] = null;
+    board.grid[newx][newy] = this;
+    board.grid[x][y] = null;
     hasMoved = true;
     board.moveLogPieces.add(this);
     board.moveLogSquares.add(newPos);
@@ -55,4 +55,8 @@ abstract class Piece {
   public void display() {
     image(sprite, squareSize * (int) position.x, squareSize * (int) (7 - position.y), squareSize, squareSize);
   }
+  
+  public int gameOver() {
+    return -1;
+  }  
 }
