@@ -12,6 +12,8 @@ class Board {
   final int BLACK = 1;
   ArrayList<Piece> moveLogPieces;
   ArrayList<PVector> moveLogSquares;
+  Piece lastPieceMoved;
+  PVector lastSquareMoved;
   boolean turnFinished;
   int castleNow; //0 = no castle, 1 = kingside, -1 = queenside
   
@@ -64,7 +66,7 @@ class Board {
     for (Piece[] plist : grid) {
       for (Piece p : plist) {
         if (p != null) {
-          if (p.color == WHITE) {
+          if (p.col == WHITE) {
             whitePieces.add(p);
           }
           else {
@@ -75,34 +77,7 @@ class Board {
     }
   }
   
-  public ArrayList<PVector> colorValidSquares(ArrayList<Piece> pieceList) {
-    ArrayList<PVector> squareList = new ArrayList<PVector>();
-    for (Piece p : pieceList) {
-      if (p.alive == false) {
-        continue;
-      }
-      innerloop:
-      for (PVector u : p.validSquares) {
-        for (PVector v : squareList) {
-          if (Piece.equals(u, v)) {
-            continue innerloop;
-          }
-        }
-        squareList.add(u);        
-      }
-    }
-    return squareList;
-  }
-  
-  public boolean squareInLOS(ArrayList<PVector> squareList, PVector square) {
-    for (PVector v : squareList) {
-      if (Piece.equals(square, v)) {
-        return true;
-      }
-    }
-    return false;
-  }
-            
+   
   
   public void setup() {
     size(800, 800);
@@ -152,72 +127,94 @@ class Board {
     }    
   }
 
-  public void mouseClicked() {
-    if (canMove) {
-      int gridx = (int) (mouseX / squareSize);
-      int gridy = 7 - (int) (mouseY / squareSize);
-      //selecting piece
-      if (selectedPiece == null) {
-        if (grid[gridx][gridy] != null) {
-          if (grid[gridx][gridy].col == turnTracker % 2) {
-            selectedPiece = grid[gridx][gridy];
-          }
-        }      
+  public ArrayList<PVector> colorValidSquares(ArrayList<Piece> pieceList) {
+    ArrayList<PVector> squareList = new ArrayList<PVector>();
+    for (Piece p : pieceList) {
+      if (p.alive == false) {
+        continue;
       }
-      //moving piece
-      else {
-        if (selectedPiece.isMoveValid(new PVector(gridx, gridy))) {
-          selectedPiece.move(new PVector(gridx, gridy));
-          turnTracker++;      
+      innerloop:
+      for (PVector u : p.validSquares) {
+        for (PVector v : squareList) {
+          if (Piece.equals(u, v)) {
+            continue innerloop;
+          }
         }
-      }      
-    }   
+        squareList.add(u);        
+      }
+    }
+    return squareList;
   }
   
-  public boolean isLegalMove(Piece p, PVector square) {    
-    if (!p.isMoveValid(square) && !(p instanceof King)) {
-      return false;
+  public boolean squareInLOS(ArrayList<PVector> squareList, PVector square) {
+    for (PVector v : squareList) {
+      if (Piece.equals(square, v)) {
+        return true;
+      }
     }
+    return false;
+  }
+  
+  public boolean castleCheck(Piece p, PVector square) {
     ArrayList<PVector> oppVision;
     if (p.otherColor() == BLACK) {
       oppVision = colorValidSquares(blackPieces);
     }
     else {
       oppVision = colorValidSquares(whitePieces);
+    }
     
-    //castle check kingside
-    int c = p.col * 7 //either 0 or 7
-    if (p instanceof King && Piece.equals(square, new PVector[6][c])) {
-      if (board[4][c] != null && board[7][c] != null) {
-        if (!board[4][c].hasMoved && !board[7][c].hasMoved) {
-          if (board[5][c] == null && board[6][c] == null) {
-            if (!(squareInLOS(oppVision, new PVector(5, c)) && !(squareInLOS(oppVision, new PVector(6, c)))) {
+    //kingside
+    int c = p.col * 7; //either 0 or 7
+    if (p instanceof King && Piece.equals(square, new PVector(6,c))) {
+      if (grid[4][c] != null && grid[7][c] != null) {
+        if (!grid[4][c].hasMoved && !grid[7][c].hasMoved && grid[7][c] instanceof Rook) {
+          if (grid[5][c] == null && grid[6][c] == null) {
+            if (!(squareInLOS(oppVision, new PVector(4, c))) && !(squareInLOS(oppVision, new PVector(5, c))) && !(squareInLOS(oppVision, new PVector(6, c)))) {
+              castleNow = 1;
               return true;
             }
           }
         }
       }
     }
-    //castle check queenside
-    if (p instanceof King && Piece.equals(square, new PVector[2][c])) {
-      if (board[4][c] != null && board[0][c] != null) {
-        if (!board[4][c].hasMoved && !board[0][c].hasMoved) {
-          if (board[1][c] == null && board[2][c] == null && board[3][c] == null) {
-            if (!(squareInLOS(oppVision, new PVector(1, c)) && !(squareInLOS(oppVision, new PVector(2, c))) && !(squareInLOS(oppVision, new PVector(3, c)))) {
+    //queenside
+    if (p instanceof King && Piece.equals(square, new PVector(2, c))) {
+      if (grid[4][c] != null && grid[0][c] != null) {
+        if (!grid[4][c].hasMoved && !grid[0][c].hasMoved && (grid[0][c] instanceof Rook)) {
+          if (grid[1][c] == null && grid[2][c] == null && grid[3][c] == null) {
+            if (!(squareInLOS(oppVision, new PVector(4, c))) && !(squareInLOS(oppVision, new PVector(2, c))) && !(squareInLOS(oppVision, new PVector(3, c)))) {
+              castleNow = -1;
               return true;
             }
           }
         }
-      }
-    }    
+      }    
+    }
+    return false;
+  }
+           
+  public boolean isLegalMove(Piece p, PVector square) {    
+    if (!p.isMoveValid(square) && !castleCheck(p, square)) {
+      return false;
+    }
+    else {
+      return true;
+    }
+ 
+  }
+  
+  public void promotionCheck(Piece p, PVector square) {
+    if (!(p instanceof pawn)) {
+      return false;
+    }
+    if (square.y < 6.5 && square.y > 0.5) {
+      return false;
+    }
+    return true;
   }
     
     
-    
-  
-  public void castle {
-  }
-  
 
   
   public void promotion(PVector square) {
@@ -237,9 +234,43 @@ class Board {
       grid[x][y] = new Knight(this, new PVector(x, y), c);
     }    
   }
-  
+  /*
   public void enpessant {
     
+  }
+  */
+  public void mouseClicked() {
+    int gridx = (int) (mouseX / squareSize);
+    int gridy = 7 - (int) (mouseY / squareSize);    
+    if (canMove) {
+      //selecting piece
+      if (selectedPiece == null) {
+        if (grid[gridx][gridy] != null) {
+          if (grid[gridx][gridy].col == turnTracker % 2) {
+            selectedPiece = grid[gridx][gridy];
+          }
+        }      
+      }
+      //moving piece
+      else {
+        if (isLegalMove(selectedPiece, (new PVector(gridx, gridy)))) {
+          selectedPiece.move(new PVector(gridx, gridy));
+          int c = selectedPiece.col * 7;
+          //castling
+          if (castleNow == 1) {
+            board[7][c] = null;
+            board[5][c] = new Rook(this, new PVector(5, c), selectedPiece.col);
+          }
+          else if (castleNow == -1) {
+            board[0][c] = null;
+            board[3][c] = new Rook(this, new PVector(3, c), selectedPiece.col);
+          }
+          //promotion
+          
+          turnTracker++;      
+        }
+      }      
+    }   
   }
   
   public void draw() {

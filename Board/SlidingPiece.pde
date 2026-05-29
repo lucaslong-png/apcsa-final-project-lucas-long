@@ -55,5 +55,4 @@ class SlidingPiece extends Piece {
   }
   
   
-  
-  
+}

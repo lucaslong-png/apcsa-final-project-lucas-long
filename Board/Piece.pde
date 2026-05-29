@@ -12,7 +12,7 @@ abstract class Piece {
   
   public Piece(Board b, PVector position, int c) {
     board = b;
-    gameOver = -1
+    gameOver = -1;
     board.grid[(int) position.x][(int) position.y] = this;
     alive = true;
     hasMoved = false;
@@ -26,7 +26,7 @@ abstract class Piece {
   public void move(PVector newPos) {
     Piece p;
     int x = (int) position.x;
-    int y = (int) position.y
+    int y = (int) position.y;
     int newx = (int) newPos.x;
     int newy = (int) newPos.y;
     if (grid[newx][newy] != null) {
@@ -39,6 +39,8 @@ abstract class Piece {
     hasMoved = true;
     board.moveLogPieces.add(this);
     board.moveLogSquares.add(newPos);
+    board.lastPieceMoved = this;
+    board.lastSquareMoved = this;
   }
   
   public int otherColor(){
