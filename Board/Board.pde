@@ -13,7 +13,7 @@ class Board {
   ArrayList<Piece> moveLogPieces;
   ArrayList<PVector> moveLogSquares;
   boolean turnFinished;
-  boolean castleNow;
+  int castleNow; //0 = no castle, 1 = kingside, -1 = queenside
   
   
   
@@ -93,6 +93,15 @@ class Board {
     }
     return squareList;
   }
+  
+  public boolean squareInLOS(ArrayList<PVector> squareList, PVector square) {
+    for (PVector v : squareList) {
+      if (Piece.equals(square, v)) {
+        return true;
+      }
+    }
+    return false;
+  }
             
   
   public void setup() {
@@ -103,6 +112,7 @@ class Board {
     moveLogSquares = new ArrayList<PVector>();
     initializeBoard();
     initializePieces();
+    castleNow = 0;
     promote = false;
   }
   
@@ -168,8 +178,39 @@ class Board {
     if (!p.isMoveValid(square) && !(p instanceof King)) {
       return false;
     }
-    //castle check
+    ArrayList<PVector> oppVision;
+    if (p.otherColor() == BLACK) {
+      oppVision = colorValidSquares(blackPieces);
+    }
+    else {
+      oppVision = colorValidSquares(whitePieces);
     
+    //castle check kingside
+    int c = p.col * 7 //either 0 or 7
+    if (p instanceof King && Piece.equals(square, new PVector[6][c])) {
+      if (board[4][c] != null && board[7][c] != null) {
+        if (!board[4][c].hasMoved && !board[7][c].hasMoved) {
+          if (board[5][c] == null && board[6][c] == null) {
+            if (!(squareInLOS(oppVision, new PVector(5, c)) && !(squareInLOS(oppVision, new PVector(6, c)))) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+    //castle check queenside
+    if (p instanceof King && Piece.equals(square, new PVector[2][c])) {
+      if (board[4][c] != null && board[0][c] != null) {
+        if (!board[4][c].hasMoved && !board[0][c].hasMoved) {
+          if (board[1][c] == null && board[2][c] == null && board[3][c] == null) {
+            if (!(squareInLOS(oppVision, new PVector(1, c)) && !(squareInLOS(oppVision, new PVector(2, c))) && !(squareInLOS(oppVision, new PVector(3, c)))) {
+              return true;
+            }
+          }
+        }
+      }
+    }    
+  }
     
     
     
