@@ -287,6 +287,10 @@ class Board {
 
   public void draw() {
     display();
+    text("Turn:" + turnTracker, 50, 50);
+    if (turnTracker > 0) {
+      text("Last move: (" + (int) (lastSquareMoved.x + 1) + ", " + (int) (lastSquareMoved.y + 1) + ")", 450, 50); 
+    }
   }
 }
 
