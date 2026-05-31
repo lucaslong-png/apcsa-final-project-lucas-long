@@ -96,33 +96,18 @@ class Board {
         }
       }
     }
-    if (selectedPiece != null) {     
-      tint(0, 255, 255, 127);
+    if (selectedPiece != null) { 
+      if (selectedPiece.col == WHITE) {
+        tint(0, 255, 255, 127);
+      }
+      else {
+        tint(255, 255, 0, 127);
+      }     
       selectedPiece.display();
       noTint();
     }
   }
-  /*
-  public void turn() { 
-    //promotion check
-    if (moveLogPieces.get(turnTracker) instanceof Pawn) {
-      if ((int) moveLogSquares.get(turnTracker).y == 0 || (int) moveLogSquares.get(turnTracker).y == 7) {        
-        promotion(moveLogSquares.get(turnTracker));
-      }
-    }
-    
-    for (Piece p : whitePieces) {
-      if (p.gameOver() == 1) {
-        gameover = true;
-      }
-    }
-    for (Piece p : blackPieces) {
-      if (p.gameOver() == 1) {
-        gameover = true;
-      }
-    }    
-  }
-  */
+
 
   public ArrayList<PVector> colorValidSquares(ArrayList<Piece> pieceList) {
     ArrayList<PVector> squareList = new ArrayList<PVector>();
@@ -151,6 +136,7 @@ class Board {
     }
     return false;
   }
+  
   
   public boolean castleCheck(Piece p, PVector square) {
     if (!(p instanceof King)) {
@@ -298,6 +284,7 @@ class Board {
     }   
   }
   
+
   public void draw() {
     display();
   }
