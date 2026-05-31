@@ -21,18 +21,24 @@ class Pawn extends Piece {
   public boolean isMoveValid(PVector newPos) {
     int newx = (int) newPos.x;
     int newy = (int) newPos.y;
+    if (newx < 0 || newx > 7 || newy < 0 || newy > 7) {
+      return false;
+    }
     int x = (int) position.x;
     int y = (int) position.y;
-    if (newx == x && board.grid[newx][y + dy] == null)  {
-      if (newy - dy == y) {
-         return true;
-      }
-      if (newy - 2 * dy == y && board.grid[newx][y + 2 * dy] == null && !hasMoved) {
-        return true;
+    if (!(y + dy < 0 || y + dy > 7)) {     
+      if (newx == x && board.grid[newx][y + dy] == null)  {
+        if (newy - dy == y) {
+           return true;
+        }
+        if (!hasMoved) {
+          if (newy - 2 * dy == y && board.grid[newx][y + 2 * dy] == null) {
+            return true;
+          }
+        }
       }
     }
-    
-    else if (abs(newx - x) == 1 && newy - dy == y) {
+    if (abs(newx - x) == 1 && newy - dy == y) {
       if (board.grid[newx][newy] != null) {
         if (board.grid[newx][newy].col != this.col) {
           return true;

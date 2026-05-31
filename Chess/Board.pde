@@ -153,6 +153,9 @@ class Board {
   }
   
   public boolean castleCheck(Piece p, PVector square) {
+    if (!(p instanceof King)) {
+      return false;
+    }
     ArrayList<PVector> oppVision;
     if (p.otherColor() == BLACK) {
       oppVision = colorValidSquares(blackPieces);
@@ -246,11 +249,7 @@ class Board {
     }
     pieces.add(grid[x][y]);
   }
-  /*
-  public void enpessant {
-    
-  }
-  */
+
   public void updateSquares() {
     for (int i = 0; i < whitePieces.size(); i++) {
       whitePieces.get(i).updateValidSquares();
@@ -261,8 +260,8 @@ class Board {
   }
   
   public void mouseClicked() {
-    int gridx = (int) (mouseX / squareSize);
-    int gridy = 7 - (int) (mouseY / squareSize);   
+    int gridx = constrain((int) (mouseX / squareSize), 0, 7);
+    int gridy = constrain(7 - (int) (mouseY / squareSize), 0, 7);   
     PVector selectedSquare = new PVector(gridx, gridy);
     //selecting piece
     if (selectedPiece == null) {
@@ -292,7 +291,10 @@ class Board {
         selectedPiece = null;
         castleNow = 0;
         turnTracker++;      
-      }     
+      } 
+      else {
+        selectedPiece = null;
+      }
     }   
   }
   
