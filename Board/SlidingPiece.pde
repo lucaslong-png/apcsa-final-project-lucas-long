@@ -24,13 +24,13 @@ class SlidingPiece extends Piece {
       int squareCount = (int) (disp.mag() / d.mag() + 0.1);
       for (int i = 0; i < squareCount - 1; i++) {
         PVector checkSquare = pos.add(d);
-        if (board[(int) checkSquare.x][(int) checkSquare.y] != null) {
+        if (board.grid[(int) checkSquare.x][(int) checkSquare.y] != null) {
           return false;
         }
       }
-    }
-    if (board[(int) newPos.x][(int) newPos.y] != null) {
-      if (board[(int) newPos.x][(int) newPos.y].col == this.col) {
+    }  
+    if (board.grid[(int) newPos.x][(int) newPos.y] != null) {
+      if (board.grid[(int) newPos.x][(int) newPos.y].col == this.col) {
         return false;
       }
     }
@@ -46,13 +46,11 @@ class SlidingPiece extends Piece {
         if (checkPos.x < 0 || checkPos.x > 7 || checkPos.y < 0 || checkPos.y > 7) {
           break;
         }
-        if (isMoveValid(checkPos)) {
+        if (isMoveValid(checkPos)) {  
           validSquares.add(checkPos.copy());
-        }
+        }  
       }
       checkPos = position.copy();
     }
-  }
-  
-  
+  } 
 }
